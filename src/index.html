@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI学習レコメンド (モック)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="logo">AI学習レコメンド <span class="badge">モック</span></h1>
+      <p class="tagline">中高生向け 数学単元レコメンド (v1)</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 入力画面 -->
+    <section id="input-screen" class="screen" aria-labelledby="input-title">
+      <h2 id="input-title">学習情報を入力してください</h2>
+
+      <form id="recommend-form" novalidate>
+        <!-- 学年 -->
+        <div class="form-group">
+          <label for="grade">学年 <span class="required">*</span></label>
+          <select id="grade" name="grade" aria-describedby="grade-error">
+            <option value="">選択してください</option>
+            <optgroup label="中学">
+              <option value="中1">中学1年</option>
+              <option value="中2">中学2年</option>
+              <option value="中3">中学3年</option>
+            </optgroup>
+            <optgroup label="高校">
+              <option value="高1">高校1年</option>
+              <option value="高2">高校2年</option>
+              <option value="高3">高校3年</option>
+            </optgroup>
+          </select>
+          <p id="grade-error" class="error-text" role="alert" hidden></p>
+        </div>
+
+        <!-- 科目 (v1: 数学のみ) -->
+        <div class="form-group">
+          <label>科目</label>
+          <div class="readonly-field">数学 <span class="note">(v1では数学のみ対応)</span></div>
+        </div>
+
+        <!-- 理解済み単元 -->
+        <div class="form-group">
+          <label>理解済み単元（複数選択可）</label>
+          <div id="understood-units" class="checkbox-grid" aria-live="polite">
+            <p class="hint">学年を選択すると単元が表示されます</p>
+          </div>
+        </div>
+
+        <!-- 苦手単元 -->
+        <div class="form-group">
+          <label>苦手単元（複数選択可）</label>
+          <div id="weak-units" class="checkbox-grid" aria-live="polite">
+            <p class="hint">学年を選択すると単元が表示されます</p>
+          </div>
+          <p id="conflict-error" class="error-text" role="alert" hidden></p>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="submit-btn" class="primary-btn">推薦を受ける</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ローディング -->
+    <section id="loading-screen" class="screen" hidden aria-live="polite">
+      <div class="loading-box">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>AIが推薦を考えています...</p>
+        <p class="hint" id="loading-elapsed">経過時間: 0.0秒</p>
+      </div>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="result-screen" class="screen" hidden aria-labelledby="result-title">
+      <h2 id="result-title">あなたへのおすすめ単元</h2>
+      <p class="result-meta" id="result-meta"></p>
+      <div id="recommendations" class="card-grid"></div>
+      <div class="form-actions">
+        <button type="button" id="retry-btn" class="primary-btn">もう一度推薦を受ける</button>
+      </div>
+    </section>
+
+    <!-- エラー画面 -->
+    <section id="error-screen" class="screen" hidden aria-labelledby="error-title">
+      <h2 id="error-title">エラーが発生しました</h2>
+      <div class="error-box">
+        <p id="error-message">AI APIへの接続に失敗しました。しばらくしてからもう一度お試しください。</p>
+        <div class="form-actions">
+          <button type="button" id="retry-api-btn" class="primary-btn">リトライ</button>
+          <button type="button" id="back-btn" class="secondary-btn">入力に戻る</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>QAポートフォリオ用モック / PRD: AI学習レコメンド機能</p>
+      <p>
+        <label>
+          <input type="checkbox" id="force-error" />
+          API失敗をシミュレート (テスト用)
+        </label>
+        <label style="margin-left:1em;">
+          <input type="checkbox" id="force-slow" />
+          レスポンス遅延をシミュレート (12秒)
+        </label>
+      </p>
+    </div>
+  </footer>
+
+  <script src="units.js"></script>
+  <script src="recommender.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

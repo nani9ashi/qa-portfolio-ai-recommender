@@ -1,0 +1,237 @@
+/* ===== Reset / Base ===== */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+               "Yu Gothic UI", Meiryo, sans-serif;
+  color: #222;
+  background: #f5f7fb;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== Header ===== */
+.site-header {
+  background: linear-gradient(135deg, #4a6cf7, #6a8cff);
+  color: #fff;
+  padding: 24px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.header-inner { display: flex; flex-direction: column; gap: 4px; }
+.logo { margin: 0; font-size: 1.6rem; }
+.badge {
+  display: inline-block;
+  background: #fff;
+  color: #4a6cf7;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+.tagline { margin: 0; opacity: 0.9; font-size: 0.9rem; }
+
+/* ===== Screens ===== */
+.screen {
+  background: #fff;
+  margin: 24px 0;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.screen h2 {
+  margin: 0 0 20px;
+  font-size: 1.25rem;
+  border-left: 4px solid #4a6cf7;
+  padding-left: 10px;
+}
+
+/* ===== Form ===== */
+.form-group { margin-bottom: 24px; }
+.form-group > label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+.required { color: #d33; margin-left: 2px; }
+
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+}
+select:focus { outline: 2px solid #4a6cf7; outline-offset: 1px; }
+
+.readonly-field {
+  padding: 10px 12px;
+  background: #f0f2f8;
+  border-radius: 6px;
+  color: #555;
+}
+.note { font-size: 0.85em; color: #888; margin-left: 6px; }
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  padding: 12px;
+  background: #fafbfd;
+  border: 1px solid #e3e6ef;
+  border-radius: 6px;
+  min-height: 60px;
+}
+.checkbox-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #fff;
+  border: 1px solid #e3e6ef;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.92rem;
+  transition: background 0.15s;
+}
+.checkbox-grid label:hover { background: #eef2ff; }
+.checkbox-grid label.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f0f0f0;
+}
+.checkbox-grid .hint { color: #888; font-size: 0.9rem; margin: 0; }
+
+.error-text {
+  color: #d33;
+  font-size: 0.88rem;
+  margin: 6px 0 0;
+}
+
+/* ===== Buttons ===== */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+.primary-btn {
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.primary-btn:hover { background: #3a5ce7; }
+.primary-btn:disabled { background: #99a8d6; cursor: not-allowed; }
+
+.secondary-btn {
+  background: #fff;
+  color: #4a6cf7;
+  border: 1px solid #4a6cf7;
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.secondary-btn:hover { background: #eef2ff; }
+
+/* ===== Loading ===== */
+.loading-box {
+  text-align: center;
+  padding: 40px 20px;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 5px solid #e3e6ef;
+  border-top-color: #4a6cf7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hint { color: #888; font-size: 0.9rem; }
+
+/* ===== Result Cards ===== */
+.result-meta {
+  font-size: 0.88rem;
+  color: #666;
+  margin: -10px 0 16px;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.rec-card {
+  border: 1px solid #e3e6ef;
+  border-left: 5px solid #4a6cf7;
+  border-radius: 8px;
+  padding: 18px;
+  background: #fafbfd;
+}
+.rec-card .rank {
+  font-size: 0.8rem;
+  background: #4a6cf7;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.rec-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+.rec-card .reason {
+  margin: 0;
+  color: #444;
+}
+.rec-card .meta {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: #888;
+}
+
+/* ===== Error ===== */
+.error-box {
+  background: #fff5f5;
+  border: 1px solid #f4c5c5;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+.error-box p { margin-top: 0; color: #a02020; }
+
+/* ===== Footer ===== */
+.site-footer {
+  margin-top: 40px;
+  padding: 20px 0;
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+  border-top: 1px solid #e3e6ef;
+}
+.site-footer label { cursor: pointer; }
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .screen { padding: 18px; }
+  .checkbox-grid { grid-template-columns: 1fr 1fr; }
+  .form-actions { flex-direction: column; }
+  .primary-btn, .secondary-btn { width: 100%; }
+}
