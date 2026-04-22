@@ -1,0 +1,21 @@
+# 環境変数
+.env
+.env.local
+
+# 依存関係
+node_modules/
+__pycache__/
+*.pyc
+
+# テスト結果・キャッシュ
+playwright-report/
+test-results/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# エディタ
+.vscode/
+.idea/
