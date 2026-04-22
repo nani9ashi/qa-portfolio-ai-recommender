@@ -80,17 +80,40 @@ select:focus { outline: 2px solid #4a6cf7; outline-offset: 1px; }
 }
 .note { font-size: 0.85em; color: #888; margin-left: 6px; }
 
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 8px;
+/* 外側コンテナ: 学年グループを縦に積む */
+.unit-select {
   padding: 12px;
   background: #fafbfd;
   border: 1px solid #e3e6ef;
   border-radius: 6px;
   min-height: 60px;
 }
-.checkbox-grid label {
+.unit-select > .hint { color: #888; font-size: 0.9rem; margin: 0; }
+
+/* 学年グループ (fieldset) */
+.grade-group {
+  border: 1px solid #d8dce8;
+  border-radius: 6px;
+  padding: 6px 14px 12px;
+  margin: 0 0 10px;
+  background: #fff;
+}
+.grade-group:last-child { margin-bottom: 0; }
+.grade-group legend {
+  font-weight: 600;
+  color: #4a6cf7;
+  padding: 0 8px;
+  font-size: 0.92rem;
+}
+
+/* 単元チェックボックスのグリッド (fieldset 内) */
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+.unit-grid label {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -102,13 +125,12 @@ select:focus { outline: 2px solid #4a6cf7; outline-offset: 1px; }
   font-size: 0.92rem;
   transition: background 0.15s;
 }
-.checkbox-grid label:hover { background: #eef2ff; }
-.checkbox-grid label.disabled {
+.unit-grid label:hover { background: #eef2ff; }
+.unit-grid label.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   background: #f0f0f0;
 }
-.checkbox-grid .hint { color: #888; font-size: 0.9rem; margin: 0; }
 
 .error-text {
   color: #d33;
@@ -231,7 +253,7 @@ select:focus { outline: 2px solid #4a6cf7; outline-offset: 1px; }
 /* ===== Responsive ===== */
 @media (max-width: 600px) {
   .screen { padding: 18px; }
-  .checkbox-grid { grid-template-columns: 1fr 1fr; }
+  .unit-grid { grid-template-columns: 1fr 1fr; }
   .form-actions { flex-direction: column; }
   .primary-btn, .secondary-btn { width: 100%; }
 }

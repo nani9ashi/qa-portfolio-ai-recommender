@@ -18,7 +18,12 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // ===== 単元チェックボックス描画 =====
+  // ===== 単元チェックボックス描画 (学年ごとに fieldset でグループ化) =====
+  const GRADE_DISPLAY_NAME = {
+    "中1": "中学1年", "中2": "中学2年", "中3": "中学3年",
+    "高1": "高校1年", "高2": "高校2年", "高3": "高校3年",
+  };
+
   function renderUnitCheckboxes(containerId, units, otherSelectedIds) {
     const container = $(containerId);
     container.innerHTML = "";
@@ -26,23 +31,48 @@
       container.innerHTML = '<p class="hint">学年を選択すると単元が表示されます</p>';
       return;
     }
+
+    // 学年ごとにグループ化
+    const byGrade = {};
     units.forEach(u => {
-      const label = document.createElement("label");
-      label.dataset.unitId = u.id;
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.value = u.id;
-      cb.dataset.unitName = u.name;
+      if (!byGrade[u.grade]) byGrade[u.grade] = [];
+      byGrade[u.grade].push(u);
+    });
 
-      // 同じ単元が他方で選択中なら無効化
-      if (otherSelectedIds.has(u.id)) {
-        cb.disabled = true;
-        label.classList.add("disabled");
-      }
+    // GRADE_ORDER 順に fieldset を生成
+    GRADE_ORDER.forEach(grade => {
+      if (!byGrade[grade]) return;
+      const fieldset = document.createElement("fieldset");
+      fieldset.className = "grade-group";
 
-      label.appendChild(cb);
-      label.appendChild(document.createTextNode(u.name));
-      container.appendChild(label);
+      const legend = document.createElement("legend");
+      legend.textContent = GRADE_DISPLAY_NAME[grade] || grade;
+      fieldset.appendChild(legend);
+
+      const grid = document.createElement("div");
+      grid.className = "unit-grid";
+
+      byGrade[grade].forEach(u => {
+        const label = document.createElement("label");
+        label.dataset.unitId = u.id;
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = u.id;
+        cb.dataset.unitName = u.name;
+
+        // 同じ単元が他方で選択中なら無効化
+        if (otherSelectedIds.has(u.id)) {
+          cb.disabled = true;
+          label.classList.add("disabled");
+        }
+
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(u.name));
+        grid.appendChild(label);
+      });
+
+      fieldset.appendChild(grid);
+      container.appendChild(fieldset);
     });
   }
 

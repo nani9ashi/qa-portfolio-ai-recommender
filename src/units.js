@@ -64,7 +64,7 @@ const UNITS = {
   // 数学A : 図形の性質 / 場合の数と確率
   "高1": [
     { id: "h1_kazutoshiki",      name: "数と式",         prerequisites: ["m3_tenkai", "m3_heihoukon"] },
-    { id: "h1_nijikansuu",       name: "二次関数",       prerequisites: ["h1_kazutoshiki", "m3_nijikansuu"] },
+    { id: "h1_nijikansuu",       name: "二次関数(高1)",  prerequisites: ["h1_kazutoshiki", "m3_nijikansuu"] },
     { id: "h1_sankakuhi",        name: "三角比",         prerequisites: ["m3_sanheihou"] },
     { id: "h1_zukei_seishitsu",  name: "図形の性質",     prerequisites: ["m3_souji", "m3_enjou"] },
     { id: "h1_baai",             name: "場合の数と確率", prerequisites: ["m2_kakuritsu"] },
