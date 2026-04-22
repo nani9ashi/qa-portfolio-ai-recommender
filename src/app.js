@@ -41,7 +41,7 @@
       }
 
       label.appendChild(cb);
-      label.appendChild(document.createTextNode(`${u.name} (${u.grade})`));
+      label.appendChild(document.createTextNode(u.name));
       container.appendChild(label);
     });
   }
