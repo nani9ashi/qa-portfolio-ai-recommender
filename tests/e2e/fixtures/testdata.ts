@@ -15,8 +15,9 @@ export const unitMapping: Record<
   { unitId: string; canonicalName: string; grade: string }
 > = {
   // 中1
-  "正負の数":     { unitId: "m1_seifu",       canonicalName: "正の数と負の数", grade: "中1" },
-  "文字式":       { unitId: "m1_mojishiki",   canonicalName: "文字式",         grade: "中1" },
+  "正負の数":         { unitId: "m1_seifu",     canonicalName: "正の数と負の数", grade: "中1" },
+  "正の数と負の数":   { unitId: "m1_seifu",     canonicalName: "正の数と負の数", grade: "中1" }, // 正式名でも引けるよう別名登録 (m1AllUnits 等で参照)
+  "文字式":           { unitId: "m1_mojishiki", canonicalName: "文字式",         grade: "中1" },
   "一元一次方程式": { unitId: "m1_houteishiki", canonicalName: "一元一次方程式", grade: "中1" },
   "比例・反比例": { unitId: "m1_hireihanpi",  canonicalName: "比例・反比例",   grade: "中1" },
   "比例":         { unitId: "m1_hireihanpi",  canonicalName: "比例・反比例",   grade: "中1" }, // 設計書で「比例」と表記されるため別名登録
