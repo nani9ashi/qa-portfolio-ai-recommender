@@ -1,17 +1,26 @@
 {
-  "name": "atama-recommend-mock",
+  "name": "qa-portfolio-ai-recommender",
   "version": "0.1.0",
   "private": true,
-  "description": "AI学習レコメンド機能 (QAポートフォリオ用モック)",
+  "description": "AI学習レコメンド機能 (QAポートフォリオ)",
   "scripts": {
-    "start": "http-server src -p 5173 -c-1",
+    "start": "concurrently --names \"frontend,backend\" --prefix-colors \"cyan,magenta\" \"npm:start:frontend\" \"npm:start:backend\"",
+    "start:frontend": "http-server src -p 5173 -c-1",
+    "start:backend": "node backend/server.js",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report"
   },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
     "@types/node": "^20.11.0",
+    "concurrently": "^9.0.0",
     "http-server": "^14.1.1",
     "typescript": "^5.4.0"
   }

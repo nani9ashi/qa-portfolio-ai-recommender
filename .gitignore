@@ -1,6 +1,7 @@
 # 環境変数
 .env
 .env.local
+backend/.env
 
 # 依存関係
 node_modules/
