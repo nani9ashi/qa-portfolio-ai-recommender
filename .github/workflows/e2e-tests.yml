@@ -1,0 +1,65 @@
+name: E2E Tests
+
+# main への push と main への PR で起動する。
+# 開発ブランチへの push は対象外 (v1 スコープを最小化)。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  e2e-tests:
+    name: E2E テスト (Playwright + Chromium)
+    runs-on: ubuntu-latest
+    # 暴走防止用の上限。通常は依存DL+Chromium DL+テスト実行で 5〜8 分程度を想定。
+    timeout-minutes: 15
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Node.js をセットアップ
+        # Node 24.x = Active LTS (2025-10 昇格 / サポート期限 2028-04-30)
+        # cache: 'npm' は package-lock.json をハッシュキーとして node_modules 解決を高速化する。
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: 依存パッケージをインストール
+        # npm install ではなく npm ci を使用する理由:
+        # - package-lock.json に基づき完全に決定論的にインストールされる
+        # - lock ファイル自体を書き換えない (CI 上で予期せぬ差分が出ない)
+        # - 既存の node_modules を一旦削除するため、キャッシュ汚染にも強い
+        run: npm ci
+
+      - name: Playwright ブラウザをインストール
+        # --with-deps を付けることで Chromium 動作に必要な OS 共有ライブラリ
+        # (libgbm, libxshmfence, libnss3 等) を apt 経由で一括インストールする。
+        # ubuntu-latest はパスワードレス sudo が使えるため追加設定不要。
+        # ブラウザは Chromium のみに限定 (本プロジェクトの v1 スコープ)。
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E テストを実行
+        # 設定ファイルがリポジトリルートではなく tests/ 配下にあるため
+        # --config フラグで明示的にパスを渡す。
+        # webServer は playwright.config.ts 内で http-server が自動起動される構成。
+        # (reuseExistingServer: !process.env.CI のため、CI では毎回新規起動される)
+        run: npx playwright test --config tests/playwright.config.ts
+
+      - name: テスト失敗時に Playwright レポートと実行成果物をアップロード
+        # if: failure() で失敗時のみアップロード (合格時は Artifact 容量を節約)。
+        # 出力先は playwright.config.ts の場所基準で tests/ 配下に生成される。
+        # - tests/playwright-report/  : HTML レポート
+        # - tests/test-results/        : スクリーンショット / 動画 / トレース (失敗ケース分のみ)
+        # retention-days: 7  : 失敗調査は直近のランで行うため7日で十分。
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            tests/playwright-report/
+            tests/test-results/
+          retention-days: 7
+          if-no-files-found: warn
