@@ -126,77 +126,60 @@
   }
 
   // ===== レコメンド API 呼び出し =====
-  // バックエンドの POST /api/recommend に問い合わせる。
-  // fetch が失敗した場合 (バックエンド未接続・ネットワーク切断等) は
-  // ローカルの recommend() にフォールバックしてブラウザ単体でも動作可能にする。
-  // TODO(step4): 実APIに接続後、このフォールバックは削除予定。
-  const API_ENDPOINT = "/api/recommend";
+  // バックエンドの POST /api/recommend を呼び出す。
+  // フロントエンド (port 5173) からバックエンド (port 3001) へのクロスオリジン呼び出し。
+  // バックエンド側で CORS 許可 + Claude API 経由で推薦理由を生成する。
+  const API_ENDPOINT = "http://localhost:3001/api/recommend";
 
   function callRecommendApi(input) {
     const forceError = $("force-error").checked;
     const forceSlow = $("force-slow").checked;
+
+    // デバッグ用スイッチをクエリパラメータとしてサーバに伝播
+    // (現状の app.js の挙動を維持しつつ、E2E テストでは page.route でモックされるため影響なし)
+    const params = new URLSearchParams();
+    if (forceError) params.append("simulate", "error");
+    if (forceSlow)  params.append("simulate", "slow");
+    const url = params.toString() ? `${API_ENDPOINT}?${params.toString()}` : API_ENDPOINT;
 
     const t0 = performance.now();
     const interval = setInterval(() => {
       const elapsed = ((performance.now() - t0) / 1000).toFixed(1);
       $("loading-elapsed").textContent = `経過時間: ${elapsed}秒`;
     }, 100);
-
     const stopTimer = () => clearInterval(interval);
 
-    // デバッグ用スイッチ: 強制エラー
-    if (forceError) {
-      return new Promise((_, reject) => {
-        setTimeout(() => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            grade: input.grade,
+            understoodIds: input.understoodIds,
+            weakIds: input.weakIds,
+          }),
+        });
+
+        if (!response.ok) {
           stopTimer();
-          reject(new Error("API接続エラー (シミュレート)"));
-        }, 400);
-      });
-    }
-    // デバッグ用スイッチ: 強制遅延
-    const artificialDelay = forceSlow ? 12000 : 0;
-
-    return new Promise((resolve, reject) => {
-      setTimeout(async () => {
-        try {
-          const response = await fetch(API_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              grade: input.grade,
-              understoodIds: input.understoodIds,
-              weakIds: input.weakIds,
-            }),
-          });
-
-          if (!response.ok) {
-            stopTimer();
-            reject(new Error(`APIエラー (HTTP ${response.status})`));
-            return;
-          }
-
-          const payload = await response.json();
-          // サーバレスポンスを画面描画用の形式に変換
-          const result = (payload.recommendations || []).map(r => ({
-            unit: { id: r.unitId, name: r.unitName, grade: r.grade },
-            reason: r.reason,
-            score: r.score,
-          }));
-          stopTimer();
-          resolve({ result, elapsedMs: performance.now() - t0 });
-        } catch (e) {
-          // フォールバック: バックエンド未接続時はローカルのルールエンジンで計算
-          console.warn("API未接続のためローカル実装にフォールバック:", e.message);
-          try {
-            const result = recommend(input);
-            stopTimer();
-            resolve({ result, elapsedMs: performance.now() - t0 });
-          } catch (localErr) {
-            stopTimer();
-            reject(localErr);
-          }
+          reject(new Error(`APIエラー (HTTP ${response.status})`));
+          return;
         }
-      }, artificialDelay);
+
+        const payload = await response.json();
+        // サーバレスポンスを画面描画用の形式に変換
+        const result = (payload.recommendations || []).map(r => ({
+          unit: { id: r.unitId, name: r.unitName, grade: r.grade },
+          reason: r.reason,
+          score: r.score,
+        }));
+        stopTimer();
+        resolve({ result, elapsedMs: performance.now() - t0 });
+      } catch (e) {
+        stopTimer();
+        reject(e);
+      }
     });
   }
 
