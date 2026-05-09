@@ -2,10 +2,11 @@
 pytest 共通設定 / フィクスチャ。
 
 責務:
-- .env から BACKEND_URL 等の設定を読み込む
+- .env から BACKEND_URL / ANTHROPIC_API_KEY 等の設定を読み込む
 - セッション開始時にバックエンドのヘルスチェック (失敗時は全テスト fail)
 - ゴールデンテストセットの読み込み
 - 結果出力 (Reporter) のセッションスコープ管理
+- LLM judge トレース出力先ディレクトリの提供 (Phase 2)
 """
 
 import importlib.machinery
@@ -44,8 +45,22 @@ def _register_ai_quality_package() -> None:
 
 _register_ai_quality_package()
 
-# .env 読み込み (tests/ai-quality/.env を最優先)
-load_dotenv(_AI_QUALITY_ROOT / ".env")
+
+# ===== .env 読み込み =====
+# Phase 2 で ANTHROPIC_API_KEY が必要。
+# 優先順位: tests/ai-quality/.env → backend/.env (両方ロードし、tests 側を優先)
+def _load_env_files() -> None:
+    """tests/ai-quality/.env と backend/.env の順で読み込む (先に読まれた値が優先)"""
+    ai_env = _AI_QUALITY_ROOT / ".env"
+    backend_env = _AI_QUALITY_ROOT.parent.parent / "backend" / ".env"
+    # tests 側 .env を先に読む (override=False で先勝ち)
+    load_dotenv(ai_env, override=False)
+    # backend 側 .env で未設定キーを補完
+    load_dotenv(backend_env, override=False)
+
+
+_load_env_files()
+
 
 from tests.ai_quality.helpers.api_client import health_check  # noqa: E402
 from tests.ai_quality.helpers.reporters import ResultRecorder, make_run_dir  # noqa: E402
@@ -96,6 +111,14 @@ def recorder(run_dir) -> ResultRecorder:
     rec = ResultRecorder(run_dir)
     _RECORDER_HOLDER["recorder"] = rec
     return rec
+
+
+@pytest.fixture(scope="session")
+def llm_traces_dir(run_dir) -> Path:
+    """LLM judge トレース JSONL の保存先ディレクトリ (Phase 2)"""
+    d = run_dir / "llm_judge_traces"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
 
 
 # ===== セッション終了時に集計を出力 =====
