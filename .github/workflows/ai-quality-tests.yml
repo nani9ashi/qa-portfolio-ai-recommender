@@ -1,0 +1,99 @@
+name: AI Quality Tests
+
+# 手動実行のみ (Claude API のコスト発生のため)
+# GitHub Actions UI の "Run workflow" ボタンから起動。
+on:
+  workflow_dispatch:
+    inputs:
+      consistency_runs:
+        description: "一貫性テストの呼び出し回数 (デフォルト 10、CIではコスト節約で短縮可)"
+        required: false
+        default: "10"
+
+jobs:
+  ai-quality-tests:
+    name: AI 出力品質テスト (pytest + 実 Claude API)
+    runs-on: ubuntu-latest
+    # Claude API レイテンシ + 一貫性テスト 10×3 + 全テスト実行を考慮し30分の上限
+    timeout-minutes: 30
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Node.js をセットアップ
+        # バックエンド (Express) を起動するため Node が必要
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Python をセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: tests/ai-quality/requirements.txt
+
+      - name: Node 依存パッケージをインストール
+        # npm ci でバックエンドの express / @anthropic-ai/sdk 等を取得
+        run: npm ci
+
+      - name: Python 依存パッケージをインストール
+        run: pip install -r tests/ai-quality/requirements.txt
+
+      - name: バックエンドをバックグラウンド起動
+        # GitHub Secrets から ANTHROPIC_API_KEY を注入
+        # nohup でバックグラウンド化し、ログを backend.log にリダイレクト
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          mkdir -p backend
+          # backend/.env を一時生成 (リポジトリにコミットされない値)
+          echo "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" > backend/.env
+          nohup node backend/server.js > backend.log 2>&1 &
+          echo $! > backend.pid
+
+      - name: バックエンド起動を待機 (最大30秒)
+        # /health が ok を返すまで最大30秒ポーリング
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3001/health | grep -q '"status":"ok"'; then
+              echo "バックエンド起動確認 (${i}秒)"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "バックエンド起動タイムアウト"
+          cat backend.log
+          exit 1
+
+      - name: AI 品質テストを実行
+        # CONSISTENCY_RUNS は workflow_dispatch の入力で制御可能 (デフォルト 10)
+        # 結果は tests/ai-quality/results/YYYY-MM-DD_HH-MM-SS/ に出力される
+        env:
+          BACKEND_URL: http://localhost:3001
+          CONSISTENCY_RUNS: ${{ github.event.inputs.consistency_runs }}
+        run: |
+          pytest tests/ai-quality \
+            --html=tests/ai-quality/results/last-run.html \
+            --self-contained-html
+
+      - name: 結果を Artifact としてアップロード (常に)
+        # 失敗時のみではなく常にアップロード (合格時のメトリクスもポートフォリオ価値あり)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-quality-results
+          path: |
+            tests/ai-quality/results/
+            backend.log
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: バックエンドを停止
+        if: always()
+        run: |
+          if [ -f backend.pid ]; then
+            kill $(cat backend.pid) 2>/dev/null || true
+          fi
