@@ -159,7 +159,7 @@ AI出力品質テストで使用する評価用入力データ。実務ではPdM
 | GT-004 | 高2 | 数と式、二次関数 | 微分 | 高学年での推薦理由検証 |
 | GT-005 | 中3 | 比例のみ | なし | 前提知識2段階の検証 |
 
-完全なデータは `tests/ai-quality/golden_test_set.json` に格納する。
+完全なデータは `tests/ai-quality/fixtures/golden_test_set.json` に格納する。
 
 ---
 
