@@ -1,0 +1,92 @@
+[
+  {
+    "id": "GT-001",
+    "input": {
+      "grade": "中2",
+      "understoodIds": ["m2_ichijikansuu"],
+      "weakIds": ["m2_renritsu"]
+    },
+    "expected_units": ["m2_renritsu", "m1_hireihanpi"],
+    "expected_reason_keywords": ["連立方程式", "一次関数"],
+    "forbidden_units": ["m2_bibun_dummy", "m1_seifu_invalid"],
+    "forbidden_keywords": ["存在しない架空の単元名"],
+    "_note": {
+      "reasoning_source": "テスト設計書 5.2 サンプル定義をそのまま採用",
+      "expected_units_rationale": "苦手の連立方程式自体と、その前提となる比例・反比例 (一次関数の前提) が推薦されることを期待",
+      "forbidden_units_rationale": "学習指導要領に存在しないダミー単元名を架空単元検出のため記載",
+      "verified_by_human": true
+    }
+  },
+  {
+    "id": "GT-002",
+    "input": {
+      "grade": "中3",
+      "understoodIds": ["m2_ichijikansuu", "m2_renritsu"],
+      "weakIds": ["m3_nijikansuu"]
+    },
+    "expected_units": ["m3_nijikansuu", "m3_nijihouteishiki"],
+    "expected_reason_keywords": ["二次関数", "一次関数"],
+    "forbidden_units": ["h2_bibun", "h3_sekibun"],
+    "forbidden_keywords": ["微分", "積分"],
+    "_note": {
+      "reasoning_source": "学習指導要領 (中3 関数 y=ax²) + units.js prerequisite チェーン",
+      "expected_units_rationale": "苦手の二次関数(中3)自体と、その前提である二次方程式が推薦されることを期待。一次関数は理解済みのため推薦理由内で『一次関数の発展』として言及される想定",
+      "forbidden_units_rationale": "中3生に高校範囲の微分・積分を提案することは学習指導要領逸脱、ハルシネーションの典型",
+      "verified_by_human": false
+    }
+  },
+  {
+    "id": "GT-003",
+    "input": {
+      "grade": "中1",
+      "understoodIds": [],
+      "weakIds": []
+    },
+    "expected_units": ["m1_seifu", "m1_heimen", "m1_data"],
+    "expected_reason_keywords": ["正の数", "負の数", "基礎"],
+    "forbidden_units": ["m2_renritsu", "m3_nijikansuu", "h1_nijikansuu"],
+    "forbidden_keywords": ["連立方程式", "二次関数"],
+    "_note": {
+      "reasoning_source": "学習指導要領 (中1先頭単元) + 境界値: 入力なし → 学年最序盤を提案する想定",
+      "expected_units_rationale": "中1の前提なし単元 (正の数と負の数 / 平面図形 / データの分布 / 確率の基礎) のうちスコアリング上位が推薦される。ベース加点+前提依存数加点で『正の数と負の数』が筆頭になる想定",
+      "forbidden_units_rationale": "前提が満たされていない上位単元 (中2以降) は AC-2 により除外されるべき",
+      "verified_by_human": false
+    }
+  },
+  {
+    "id": "GT-004",
+    "input": {
+      "grade": "高2",
+      "understoodIds": ["h1_kazutoshiki", "h1_nijikansuu"],
+      "weakIds": ["h2_bibun"]
+    },
+    "expected_units": ["h2_bibun", "h2_zukei"],
+    "expected_reason_keywords": ["微分", "二次関数", "関数"],
+    "forbidden_units": ["m1_seifu", "m1_mojishiki"],
+    "forbidden_keywords": ["小学校", "算数"],
+    "_note": {
+      "reasoning_source": "学習指導要領 (数学II 微分・積分の考え) + 苦手の前提単元 (二次関数) が理解済みである配置",
+      "expected_units_rationale": "苦手の微分(高2)自体と、その前提である二次関数を経由する後続単元 (図形と方程式) が推薦される想定。極限の概念は数学IIIスコープのため除外",
+      "forbidden_units_rationale": "高校2年生に対して中1の基礎単元や算数語彙が言及されるのは TPO 違反 (内容の妥当性低下)",
+      "verified_by_human": false
+    }
+  },
+  {
+    "id": "GT-005",
+    "input": {
+      "grade": "中3",
+      "understoodIds": ["m1_hireihanpi"],
+      "weakIds": []
+    },
+    "expected_units": ["m1_houteishiki", "m1_mojishiki", "m2_renritsu"],
+    "expected_reason_keywords": ["比例", "反比例", "前提"],
+    "forbidden_units": ["m3_nijikansuu", "m3_sanheihou"],
+    "forbidden_keywords": ["二次関数(中3)", "三平方"],
+    "_note": {
+      "reasoning_source": "前提知識2段階の検証用 (中3生だが中1の比例しか理解済みでない、上位単元が前提を満たさない状態)",
+      "expected_units_rationale": "比例・反比例を理解済みでも、一次関数 (前提に連立方程式) や二次関数 (前提に一次関数) には到達できない。前提が満たされる中1〜中2範囲の基礎単元のみが推薦されるはず",
+      "forbidden_units_rationale": "二次関数(中3)・三平方の定理は、それぞれ一次関数・相似など複数前提を要するため、現状の理解度では推薦されてはならない (AC-2 違反)",
+      "verified_by_human": false
+    }
+  }
+]

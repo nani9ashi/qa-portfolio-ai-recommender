@@ -2,6 +2,7 @@
 .env
 .env.local
 backend/.env
+tests/ai-quality/.env
 
 # 依存関係
 node_modules/
@@ -12,6 +13,11 @@ __pycache__/
 playwright-report/
 test-results/
 .pytest_cache/
+tests/ai-quality/results/
+
+# Python
+.venv/
+venv/
 
 # OS
 .DS_Store
