@@ -34,9 +34,9 @@
 | リポジトリ | テーマ | 主要技術 |
 |---|---|---|
 | **本リポジトリ** [qa-portfolio-ai-recommender](https://github.com/nani9ashi/qa-portfolio-ai-recommender) | AI 学習レコメンド機能の品質保証（戦略・関係者連携・AI 品質） | Playwright / Python+pytest / Claude API / GitHub Actions |
-| [ticket-management-system](https://github.com/nani9ashi/ticket-management-system) | BtoB チケット管理システムの品質保証（QA エンジニアの技術的基礎） | Django / Playwright / pytest / GitHub Actions |
+| [qa-portfolio-ticket-system](https://github.com/nani9ashi/qa-portfolio-ticket-system) | BtoB チケット管理システムの品質保証（QA エンジニアの技術的基礎） | Django / Playwright / pytest / GitHub Actions |
 
-両リポジトリは「**学習の深化の軌跡**」として相互に補完する関係です。チケット管理ポートフォリオで CI/CD 構築・E2E 自動化・JSTQB 準拠のドキュメンテーションを基礎として習得した上で、本リポジトリでは冒頭で挙げたより深いテーマに踏み込んでいます。
+両リポジトリは「**学習の深化の軌跡**」として相互に補完する関係です。チケット管理ポートフォリオで CI/CD 構築・E2E 自動化・JSTQB 準拠のドキュメンテーションを基礎として習得した上で、本リポジトリではより深いテーマに踏み込んでいます。
 
 ---
 
