@@ -100,31 +100,19 @@ AI を組み込んだプロダクトでは、**毎回同じ答えを返す部分
 ```mermaid
 flowchart TD
     Input["ユーザー入力<br/>学年・理解済み単元・苦手単元"]
-    Rule["ルールベース単元選定エンジン<br/><i>決定的</i>"]
-    AI["生成 AI: Claude Haiku 4.5<br/><i>確率的</i>"]
+    Rule["ルールベース単元選定エンジン（決定的）"]
+    AI["生成 AI: Claude Haiku 4.5（確率的）"]
     Output["推薦結果<br/>推薦単元 + 推薦理由"]
 
     Input --> Rule
     Rule -->|推薦単元の確定| AI
     AI -->|推薦理由テキストの生成| Output
 
-    E2E["<b>E2E テスト 18件</b><br/>モック使用、毎push自動実行"]
-    AIQuality["<b>AI 出力品質テスト 13件</b><br/>実 API 使用、手動実行"]
+    E2E["E2E テスト 18件<br/>モック使用、毎push自動実行"]
+    AIQuality["AI 出力品質テスト 13件<br/>実 API 使用、手動実行"]
 
     Rule -.検証.-> E2E
     AI -.検証.-> AIQuality
-
-    classDef inputNode fill:#e3f2fd,stroke:#1976d2
-    classDef ruleNode fill:#fff3e0,stroke:#f57c00
-    classDef aiNode fill:#f3e5f5,stroke:#7b1fa2
-    classDef outputNode fill:#e8f5e9,stroke:#388e3c
-    classDef testNode fill:#fafafa,stroke:#616161,stroke-dasharray: 5 5
-
-    class Input inputNode
-    class Rule ruleNode
-    class AI aiNode
-    class Output outputNode
-    class E2E,AIQuality testNode
 ```
 
 この2層構造により:
@@ -158,9 +146,22 @@ Python + pytest で実装した、生成 AI 出力に特化した品質テスト
 
 ハルシネーション検出・前提関係の妥当性・文体統一など、E2E では捉えにくい「AI らしい品質課題」を構造化して検証します。
 
-Phase 1（ルールベース判定）から Phase 2（LLM-as-a-judge）へ段階的に拡張し、合格率を 76.92% → 92.31% まで向上させました。判定経路の例:
+Phase 1（ルールベース判定）から Phase 2（LLM-as-a-judge）へ段階的に拡張し、合格率を 76.92% → 92.31% まで向上させました。
 
 ![AI 出力品質テスト結果サマリ](./docs/images/04-ai-quality-summary.png)
+
+上のスクリーンショットは Phase 2 ベースラインの判定経路集計を表示しています。13件のテストの最終判定がどの経路で確定したかの内訳は以下の通りです。
+
+| 経路 | 件数 | 該当テスト |
+|---|---|---|
+| ルール単独で合格 | 6 | AI-C-001 / AI-C-002 / AI-Q-001 / AI-Q-003 / AI-S-001 / AI-S-003 |
+| ルール + LLM 合意で合格 | 3 | AI-A-001 / AI-A-003 / AI-A-004 |
+| LLM が「同趣旨」と判定し合格に格上げ | 1 | AI-C-003 |
+| LLM が「文脈言及あり」と再分類し合格に格上げ | 1 | AI-Q-002 |
+| LLM が「未来言及として妥当」と再判定し合格に格上げ | 1 | AI-S-002 |
+| LLM が判定基準を厳格化し不合格に格下げ | 1 | AI-A-002 |
+
+ルール単独で済むテストには LLM を呼ばずコストを抑え、ルールでは判定しきれない箇所のみ LLM-as-a-judge を選択的に使う設計です。LLM は「合格への格上げ」と「不合格への格下げ」の双方向に作用しています。
 
 詳細は [tests/ai-quality/README.md](./tests/ai-quality/README.md) を参照。
 
