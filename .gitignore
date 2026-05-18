@@ -26,3 +26,6 @@ Thumbs.db
 # エディタ
 .vscode/
 .idea/
+
+# Claude Code (worktrees, plans, settings)
+.claude/

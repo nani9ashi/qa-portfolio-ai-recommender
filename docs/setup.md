@@ -2,7 +2,7 @@
 
 ローカル環境でアプリを起動したり、テストを実行したりするための手順書です。
 
-> README からの分離版です。動作証明は CI バッジ ([E2E Tests](https://github.com/nani9ashi/qa-portfolio-ai-recommender/actions/workflows/e2e-tests.yml) / [AI Quality Tests](https://github.com/nani9ashi/qa-portfolio-ai-recommender/actions/workflows/ai-quality-tests.yml)) と [テスト完了レポート](./test-report.md) で確認できますので、必須ではありません。
+> ローカル再現したい方向けの手順です。動作証明だけ確認したい場合は、CI バッジ ([E2E Tests](https://github.com/nani9ashi/qa-portfolio-ai-recommender/actions/workflows/e2e-tests.yml) / [AI Quality Tests](https://github.com/nani9ashi/qa-portfolio-ai-recommender/actions/workflows/ai-quality-tests.yml)) と [テスト完了レポート](./test-report.md) を参照してください。
 
 ---
 
