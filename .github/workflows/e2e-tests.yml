@@ -2,11 +2,20 @@ name: E2E Tests
 
 # main への push と main への PR で起動する。
 # 開発ブランチへの push は対象外 (v1 スコープを最小化)。
+# 文書のみの変更 (docs/, **.md, .gitignore) はテスト結果に影響しないため対象外。
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.gitignore'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.gitignore'
 
 jobs:
   e2e-tests:
