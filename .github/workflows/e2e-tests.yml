@@ -21,8 +21,10 @@ jobs:
   e2e-tests:
     name: E2E テスト (Playwright + Chromium)
     runs-on: ubuntu-latest
-    # 暴走防止用の上限。通常は依存DL+Chromium DL+テスト実行で 5〜8 分程度を想定。
-    timeout-minutes: 15
+    # 通常は npm ci + Chromium DL + テスト実行で 5〜8 分。
+    # キャッシュヒット時は Chromium DL が省略されてさらに短縮される。
+    # timeout-minutes は CDN ハング時のフェイルセーフ天井 (リトライ込みでも収まる値)。
+    timeout-minutes: 20
 
     steps:
       - name: リポジトリをチェックアウト
@@ -43,12 +45,46 @@ jobs:
         # - 既存の node_modules を一旦削除するため、キャッシュ汚染にも強い
         run: npm ci
 
-      - name: Playwright ブラウザをインストール
-        # --with-deps を付けることで Chromium 動作に必要な OS 共有ライブラリ
-        # (libgbm, libxshmfence, libnss3 等) を apt 経由で一括インストールする。
+      - name: Playwright ブラウザのキャッシュ
+        # ~/.cache/ms-playwright をキャッシュして Chromium (170 MiB) の再ダウンロードを回避する。
+        # キーは package-lock.json のハッシュ → 同一 Playwright バージョン間で再利用される。
+        # 同一バージョンでキャッシュヒット時、次ステップの browser install は丸ごとスキップされる。
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Playwright ブラウザをインストール (キャッシュミス時)
+        # cdn.playwright.dev からの DL/展開がまれにハングする既知問題への対応:
+        # - GNU `timeout` で 5 分のフェイルファストを設定し、ハング時は即座に再試行する。
+        # - 最大 3 回まで再試行 (合計最悪 15 分、ジョブ timeout 20 分内に収まる)。
+        # - `--with-deps` は使わない。apt 操作は次ステップで `install-deps` として分離した。
+        #   分離する理由: ブラウザのみをキャッシュ対象にできる (apt 結果は OS 側で保持されない) ため。
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::Attempt ${attempt}: npx playwright install chromium"
+            if timeout 300 npx playwright install chromium; then
+              echo "::endgroup::"
+              echo "Browser install succeeded on attempt ${attempt}"
+              exit 0
+            fi
+            echo "::endgroup::"
+            if [ "${attempt}" -eq 3 ]; then
+              echo "Browser install failed after 3 attempts"
+              exit 1
+            fi
+            echo "Attempt ${attempt} failed (likely CDN hang), retrying after 5s..."
+            sleep 5
+          done
+
+      - name: Playwright のシステム依存パッケージをインストール
+        # Chromium 動作に必要な OS 共有ライブラリ (libgbm, libnss3, libxkbcommon0 等) と
+        # 日本語フォント (fonts-ipafont-gothic 等) を apt 経由でインストール。
+        # `install-deps` は軽量で、--with-deps と違いハング報告は確認されていない。
         # ubuntu-latest はパスワードレス sudo が使えるため追加設定不要。
-        # ブラウザは Chromium のみに限定 (本プロジェクトの v1 スコープ)。
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install-deps chromium
 
       - name: E2E テストを実行
         # 設定ファイルがリポジトリルートではなく tests/ 配下にあるため
