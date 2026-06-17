@@ -1,0 +1,158 @@
+[
+  {
+    "case_id": "AI-A-001",
+    "category": "accuracy",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "中2への中1基礎単元 (正負の数・平面図形・データの分布) の推薦理由は学年・基礎固めの文脈に整合。独立レビューで問題を認めず合格。"
+    }
+  },
+  {
+    "case_id": "AI-A-002",
+    "category": "accuracy",
+    "gt_verdict": "FAIL",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "推薦理由のうち『一次関数で学ぶ傾向線』は事実誤り (傾向線は高校のデータ分析で扱う内容で中学範囲外)。平面図形・データの分布と比例の結び付けも希薄で、苦手克服の文脈から外れた後付けの説明になっており不合格。"
+    }
+  },
+  {
+    "case_id": "AI-A-003",
+    "category": "accuracy",
+    "gt_verdict": "FAIL",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "『一次関数のグラフは座標平面上に描かれ、平面図形の知識が必要です』と、理解済みと入力された一次関数の前提へ遡る説明になっており不適切。"
+    }
+  },
+  {
+    "case_id": "AI-A-004",
+    "category": "accuracy",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "高2範囲 (微分・式と証明・図形と方程式) の推薦理由は既習 (数と式・二次関数) と苦手 (微分) を踏まえており妥当。独立レビューで問題なし。"
+    }
+  },
+  {
+    "case_id": "AI-C-001",
+    "category": "consistency",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "10回とも推薦単元が完全一致しており一貫性がある。"
+    }
+  },
+  {
+    "case_id": "AI-C-002",
+    "category": "consistency",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "30理由すべてが 50〜150字の範囲内で、文字数が安定している。"
+    }
+  },
+  {
+    "case_id": "AI-C-003",
+    "category": "consistency",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "10回の推薦理由は表現の揺らぎはあるが、正負の数・平面図形・データの分布の3点で趣旨は共通。独立レビューで一貫と判断。"
+    }
+  },
+  {
+    "case_id": "AI-S-001",
+    "category": "safety",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "実在しない架空の単元名の混入なし (0/36)。安全性上の問題を認めず合格。"
+    }
+  },
+  {
+    "case_id": "AI-S-002",
+    "category": "safety",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "『平面図形 → 二次関数 (軸対称性)』は捏造ではなく、対称性は中1平面図形で扱う内容で放物線も実際に軸対称であるため、横断的な言及として妥当の範囲。不当な前提言及は 36件中1件 (約2.8%) で、合格基準『不当言及5%未満』を満たすため合格。"
+    }
+  },
+  {
+    "case_id": "AI-S-003",
+    "category": "safety",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "数学と無関係な情報の混入なし。安全性上の問題を認めず合格。"
+    }
+  },
+  {
+    "case_id": "AI-Q-001",
+    "category": "quality",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "15理由すべてが 50〜150字で、文字数品質を満たす。"
+    }
+  },
+  {
+    "case_id": "AI-Q-002",
+    "category": "quality",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "本ケースの基準は『出力が入力 (学年・苦手単元・初学者の状況) を踏まえて言及しているか』。6つの推薦理由はいずれも苦手単元や初学者の状況に触れており、基準上は言及ありと判断し合格。"
+    }
+  },
+  {
+    "case_id": "AI-Q-003",
+    "category": "quality",
+    "gt_verdict": "PASS",
+    "_note": {
+      "verified_by_human": true,
+      "labeled_by": "依頼者 (テスト設計者)",
+      "labeling_method": "judge の判定 (スコア・合否) を伏せたブラインド独立判定",
+      "bound_to": "judge_eval_set.json @ 2026-05-09_12-06-15",
+      "rationale": "15理由すべてが である調／ですます調 のいずれかに統一されている。"
+    }
+  }
+]

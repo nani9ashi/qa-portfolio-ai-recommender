@@ -1,0 +1,167 @@
+{
+  "summary": {
+    "n": 13,
+    "source_run": "2026-05-09_12-06-15",
+    "phase1_agreement": {
+      "match": 8,
+      "total": 13,
+      "rate": 0.6153846153846154
+    },
+    "phase2_agreement": {
+      "match": 12,
+      "total": 13,
+      "rate": 0.9230769230769231
+    },
+    "by_category": {
+      "accuracy": {
+        "total": 4,
+        "phase1_match": 2,
+        "phase2_match": 3
+      },
+      "consistency": {
+        "total": 3,
+        "phase1_match": 2,
+        "phase2_match": 3
+      },
+      "safety": {
+        "total": 3,
+        "phase1_match": 2,
+        "phase2_match": 3
+      },
+      "quality": {
+        "total": 3,
+        "phase1_match": 2,
+        "phase2_match": 3
+      }
+    },
+    "phase1_disagreements": [
+      "AI-A-002",
+      "AI-A-003",
+      "AI-C-003",
+      "AI-Q-002",
+      "AI-S-002"
+    ],
+    "phase2_disagreements": [
+      "AI-A-003"
+    ]
+  },
+  "matrix": [
+    {
+      "case_id": "AI-A-001",
+      "category": "accuracy",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-A-002",
+      "category": "accuracy",
+      "gt": "FAIL",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "FAIL",
+      "phase1_match": false,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-A-003",
+      "category": "accuracy",
+      "gt": "FAIL",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": false,
+      "phase2_match": false
+    },
+    {
+      "case_id": "AI-A-004",
+      "category": "accuracy",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-C-001",
+      "category": "consistency",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-C-002",
+      "category": "consistency",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-C-003",
+      "category": "consistency",
+      "gt": "PASS",
+      "phase1_verdict": "FAIL",
+      "phase2_verdict": "PASS",
+      "phase1_match": false,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-Q-001",
+      "category": "quality",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-Q-002",
+      "category": "quality",
+      "gt": "PASS",
+      "phase1_verdict": "FAIL",
+      "phase2_verdict": "PASS",
+      "phase1_match": false,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-Q-003",
+      "category": "quality",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-S-001",
+      "category": "safety",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-S-002",
+      "category": "safety",
+      "gt": "PASS",
+      "phase1_verdict": "FAIL",
+      "phase2_verdict": "PASS",
+      "phase1_match": false,
+      "phase2_match": true
+    },
+    {
+      "case_id": "AI-S-003",
+      "category": "safety",
+      "gt": "PASS",
+      "phase1_verdict": "PASS",
+      "phase2_verdict": "PASS",
+      "phase1_match": true,
+      "phase2_match": true
+    }
+  ]
+}

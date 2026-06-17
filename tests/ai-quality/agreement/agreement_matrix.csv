@@ -1,0 +1,14 @@
+﻿case_id,category,gt,phase1_verdict,phase2_verdict,phase1_match,phase2_match
+AI-A-001,accuracy,PASS,PASS,PASS,True,True
+AI-A-002,accuracy,FAIL,PASS,FAIL,False,True
+AI-A-003,accuracy,FAIL,PASS,PASS,False,False
+AI-A-004,accuracy,PASS,PASS,PASS,True,True
+AI-C-001,consistency,PASS,PASS,PASS,True,True
+AI-C-002,consistency,PASS,PASS,PASS,True,True
+AI-C-003,consistency,PASS,FAIL,PASS,False,True
+AI-Q-001,quality,PASS,PASS,PASS,True,True
+AI-Q-002,quality,PASS,FAIL,PASS,False,True
+AI-Q-003,quality,PASS,PASS,PASS,True,True
+AI-S-001,safety,PASS,PASS,PASS,True,True
+AI-S-002,safety,PASS,FAIL,PASS,False,True
+AI-S-003,safety,PASS,PASS,PASS,True,True
